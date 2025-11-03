@@ -1,0 +1,85 @@
+﻿@model u24753328_HW03.Models.HomeDashboardViewModel
+@{
+    ViewBag.Title = "Home Dashboard"; 
+}
+
+<header class="hero-image-banner text-white d-flex align-items-center justify-content-start text-start p-5">
+    <div class="container overlay-content text-start">
+        <h1 class="display-1 fw-bolder mb-3 text-shadow">
+            Take the Streets. <span class="text-warning">BikeStore</span>
+        </h1>
+
+        <p class="lead mb-5 text-shadow">
+            Ease your path toward the fastest way to move in the city. Free your mind as the bike adopts intuitively to power the speed you need.
+        </p>
+
+        <div class="d-grid gap-3 col-md-8 d-sm-flex justify-content-sm-start">
+            @Html.ActionLink("Explore Products", "Index", "Products", null, new { @class = "btn btn-warning btn-lg px-4 me-sm-3 fw-bold shadow" })
+            @Html.ActionLink("Explore Staff", "Index", "Staffs", null, new { @class = "btn btn-outline-light btn-lg px-4 me-sm-3 shadow" })
+            @Html.ActionLink("Explore Customers", "Index", "Customers", null, new { @class = "btn btn-outline-light btn-lg px-4 shadow" })
+        </div>
+    </div>
+</header>
+
+<footer class="tech-footer text-center py-3 bg-dark text-light border-top border-warning fixed-bottom">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <i class="fas fa-tachometer-alt me-2 text-warning"></i> Average Speed <br />25 km/h
+            </div>
+            <div class="col-md-3">
+                <i class="fas fa-battery-full me-2 text-warning"></i> Battery Range <br />70 km
+            </div>
+            <div class="col-md-3">
+                <i class="fas fa-clock me-2 text-warning"></i> Charging Time <br />3.5 h
+            </div>
+            <div class="col-md-3">
+                <i class="fas fa-weight-hanging me-2 text-warning"></i> Weight <br />16.9 kg
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/bootstrap.min.css")" />
+<style>
+
+    .hero-image-banner {
+        background: url('/Imagez/background.jpg') no-repeat center center;
+        background-size: cover;
+        min-height: 100vh;
+        position: relative;
+        padding: 0;
+        padding-top: 56px;
+    }
+
+        .hero-image-banner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.55);
+            z-index: 1;
+        }
+
+    .overlay-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    }
+
+    .tech-footer {
+        font-size: 1.1em;
+    }
+</style>
+
+
+@Scripts.Render("~/bundles/jquery")
+
+@Scripts.Render("~/bundles/bootstrap")

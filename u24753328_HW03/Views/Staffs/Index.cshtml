@@ -1,0 +1,239 @@
+﻿@model IEnumerable<u24753328_HW03.Models.staff>
+@{
+    ViewBag.Title = "Staff Management";
+    // Retrieve Paging data from ViewBag
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<style>
+    /* 1. Gold Color and General Styling */
+    .text-gold {
+        color: #B8860B !important; /* Darker Gold/Bronze for Elegance */
+    }
+
+    .btn-gold {
+        background-color: #FFD700;
+        border-color: #FFD700;
+        color: #333 !important;
+        font-weight: 600;
+        /* Subtle glossy effect via box-shadow and transition */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease-in-out;
+        border-radius: .4rem;
+    }
+
+        .btn-gold:hover {
+            background-color: #DAA520;
+            border-color: #DAA520;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    /* 2. Thin Lines and Glossy Hover for Tables */
+    /* NOTE: We will wrap the table in a card-glossy container below */
+    .table-hover-elegant tbody tr:hover {
+        background-color: #f8f9fa !important; /* Subtle light grey on hover */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+
+    .table-hover-elegant th {
+        border-bottom: 2px solid #B8860B; /* Thin gold line under header */
+        font-weight: 500; /* Less bold header text */
+        color: #555;
+    }
+
+    .table-hover-elegant td {
+        border-top: 1px solid #f0f0f0; /* Thinner row separator */
+        color: #333; /* Dark text for contrast */
+    }
+
+    .card-glossy {
+        border: 1px solid #eee; /* Very thin border */
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08); /* Soft, glossy shadow */
+        border-radius: .6rem;
+    }
+
+
+    /* 3. Input/Dropdown Polish (Not strictly needed here but kept for completeness) */
+    .form-control, .form-select {
+        border-radius: .4rem;
+        border-color: #ddd; /* Thin border color */
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.04); /* Subtle inner shadow for gloss */
+    }
+
+    /* 4. Pagination */
+    .page-item.active .page-link {
+        background-color: #B8860B;
+        border-color: #B8860B;
+        color: white;
+    }
+
+    .page-link {
+        color: #B8860B;
+        border-color: #ddd;
+    }
+
+    /* 5. Fixed Navigation Clearance */
+    .title-clearance {
+        padding-top: 60px; /* Adjust to clear fixed nav bar */
+        margin-top: 0 !important;
+    }
+
+    /* Apply styles to the Edit/Delete buttons */
+    .btn-action-primary {
+        background-color: #17a2b8; /* Info blue */
+        border-color: #17a2b8;
+    }
+
+    .btn-action-danger {
+        background-color: #dc3545; /* Danger red */
+        border-color: #dc3545;
+    }
+</style>
+
+@* Title: Applying Gold Text and Clearance styles *@
+<h2 class="text-gold display-4 fw-light mb-0 title-clearance" style="text-shadow: 1px 1px 1px rgba(0,0,0,0.05);">Staff Management 👥</h2>
+<hr class="mb-4" />
+
+@* Button: Apply btn-gold style *@
+<button type="button" class="btn btn-gold mb-4 ajax-modal-trigger"
+        data-url="@Url.Action("Create", "Staffs")"
+        data-modal-id="#crudStaffModal">
+    <i class="fa fa-plus"></i> Create New Staff Member
+</button>
+
+@* Table: Wrap in card-glossy and use table-hover-elegant *@
+<div class="card card-glossy mt-3 border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            @* Replace table-striped and table-hover with custom elegant class *@
+            <table class="table table-hover-elegant mb-0">
+                <thead class="bg-light">
+                    @* Using bg-light for header background *@
+                    <tr>
+                        <th class="py-3 text-uppercase">@Html.DisplayNameFor(model => model.first_name)</th>
+                        <th class="py-3 text-uppercase">@Html.DisplayNameFor(model => model.last_name)</th>
+                        <th class="py-3 text-uppercase">@Html.DisplayNameFor(model => model.email)</th>
+                        <th class="py-3 text-uppercase">@Html.DisplayNameFor(model => model.phone)</th>
+                        <th class="py-3 text-uppercase">Active</th>
+                        <th class="py-3 text-uppercase">Actions</th> @* CHANGED from Details to Actions *@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.first_name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.last_name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.email)</td>
+                            <td>@Html.DisplayFor(modelItem => item.phone)</td>
+                            <td>@(item.active == 1 ? "Yes" : "No")</td> @* Display 'Yes/No' instead of '1/0' *@
+                            <td>
+                                @* Edit Button *@
+                                <button type="button" class="btn btn-sm btn-action-primary ajax-modal-trigger"
+                                        data-url="@Url.Action("Edit", "Staffs", new { id = item.staff_id })"
+                                        data-modal-id="#crudStaffModal">
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+
+                                @* Delete Button *@
+                                <button type="button" class="btn btn-sm btn-action-danger ajax-modal-trigger"
+                                        data-url="@Url.Action("Delete", "Staffs", new { id = item.staff_id })"
+                                        data-modal-id="#crudStaffModal">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@* Pagination: Apply reduced margin-top (mt-3) and page-link color style *@
+<nav aria-label="Page navigation" class="mt-3">
+    <ul class="pagination justify-content-center">
+        @* Centered pagination *@
+        <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { page = pageNumber - 1 })" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == pageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+            </li>
+        }
+
+        <li class="page-item @(pageNumber >= totalPages ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { page = pageNumber + 1 })" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="modal fade" id="crudStaffModal" tabindex="-1" role="dialog" aria-labelledby="crudStaffModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            // Reusable logic for all modal triggers (Create, Edit, Delete)
+            $('.ajax-modal-trigger').click(function () {
+                var url = $(this).data('url');
+                var modalId = $(this).data('modal-id');
+
+                $.get(url, function (data) {
+                    $(modalId).find('.modal-content').html(data);
+                    $(modalId).modal('show');
+                });
+            });
+
+            // Handle ALL AJAX form submissions (Create, Edit, Delete) inside the modal
+            $(document).on('submit', '#crudStaffModal form', function (e) {
+                e.preventDefault();
+                var form = $(this);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            // Success case (from Controller returning JSON)
+                            alert(response.message);
+                            $('#crudStaffModal').modal('hide');
+                            window.location.reload();
+                        } else {
+                            // If controller logic fails but returns JSON (e.g., specific business logic error)
+                            alert("Operation failed: " + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                        // Error case, usually 400 (Validation failure) or 500 (Server error)
+                        if (xhr.status === 400) {
+                            // Validation failed, controller returned PartialView HTML (the entire modal content)
+                            $('#crudStaffModal .modal-content').html(xhr.responseText);
+                            // Re-parse validation to show client-side messages
+                            $.validator.unobtrusive.parse('#crudStaffModal .modal-content');
+                        } else {
+                            alert("An unexpected error occurred. Check server logs.");
+                            console.log(xhr.responseText);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

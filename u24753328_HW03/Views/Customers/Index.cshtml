@@ -1,0 +1,229 @@
+﻿@model IEnumerable<u24753328_HW03.Models.customer>
+@{
+    ViewBag.Title = "Customer Management";
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+
+<style>
+    
+    .text-gold {
+        color: #B8860B !important; 
+    }
+
+    .btn-gold {
+        background-color: #FFD700;
+        border-color: #FFD700;
+        color: #333 !important;
+        font-weight: 600;
+        
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease-in-out;
+        border-radius: .4rem;
+    }
+
+        .btn-gold:hover {
+            background-color: #DAA520;
+            border-color: #DAA520;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+    
+    .table-hover-elegant tbody tr:hover {
+        background-color: #f8f9fa !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
+
+    .table-hover-elegant th {
+        border-bottom: 2px solid #B8860B; 
+        font-weight: 500; 
+        color: #555;
+    }
+
+    .table-hover-elegant td {
+        border-top: 1px solid #f0f0f0; 
+        color: #333; 
+    }
+
+    .card-glossy {
+        border: 1px solid #eee; 
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08); 
+        border-radius: .6rem;
+    }
+
+
+    
+    .btn-action-primary {
+        background-color: #17a2b8; 
+        border-color: #17a2b8;
+    }
+
+    .btn-action-danger {
+        background-color: #dc3545; 
+        border-color: #dc3545;
+    }
+
+  
+    .page-item.active .page-link {
+        background-color: #B8860B;
+        border-color: #B8860B;
+        color: white;
+    }
+
+    .page-link {
+        color: #B8860B;
+        border-color: #ddd;
+    }
+
+    
+    .title-clearance {
+        padding-top: 60px;
+        margin-top: 0 !important;
+    }
+</style>
+
+
+<h2 class="text-gold display-4 fw-light mb-0 title-clearance" style="text-shadow: 1px 1px 1px rgba(0,0,0,0.05);">Customer Management 👥</h2>
+<hr class="mb-4" />
+
+
+<button type="button" class="btn btn-gold mb-4 ajax-modal-trigger"
+        data-url="@Url.Action("Create", "Customers")"
+        data-modal-id="#crudModal">
+    <i class="fa fa-plus"></i> Create New Customer
+</button>
+
+<div class="card card-glossy mt-3 border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover-elegant mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="py-3 text-uppercase">@Html.DisplayNameFor(model => model.first_name)</th>
+                        <th class="py-3 text-uppercase">@Html.DisplayNameFor(model => model.last_name)</th>
+                        <th class="py-3 text-uppercase">@Html.DisplayNameFor(model => model.email)</th>
+                        <th class="py-3 text-uppercase">@Html.DisplayNameFor(model => model.phone)</th>
+                        <th class="py-3 text-uppercase">Location</th>
+                        <th class="py-3 text-uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.first_name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.last_name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.email)</td>
+                            <td>@Html.DisplayFor(modelItem => item.phone)</td>
+                            <td>@item.street, @item.city, @item.state @item.zip_code</td>
+                            <td>
+                               
+                                <button type="button" class="btn btn-sm btn-action-primary ajax-modal-trigger"
+                                        data-url="@Url.Action("Edit", "Customers", new { id = item.customer_id })"
+                                        data-modal-id="#crudModal">
+                                    <i class="fa fa-edit"></i> Edit
+                                </button>
+
+                              
+                                <button type="button" class="btn btn-sm btn-action-danger ajax-modal-trigger"
+                                        data-url="@Url.Action("Delete", "Customers", new { id = item.customer_id })"
+                                        data-modal-id="#crudModal">
+                                    <i class="fa fa-trash"></i> Delete
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<nav aria-label="Page navigation" class="mt-3">
+    <ul class="pagination justify-content-center">
+        <li class="page-item @(pageNumber <= 1 ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { page = pageNumber - 1 })" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == pageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+            </li>
+        }
+
+        <li class="page-item @(pageNumber >= totalPages ? "disabled" : "")">
+            <a class="page-link" href="@Url.Action("Index", new { page = pageNumber + 1 })" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div class="modal fade" id="crudModal" tabindex="-1" role="dialog" aria-labelledby="crudModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            
+            $('.ajax-modal-trigger').click(function () {
+                var url = $(this).data('url');
+                var modalId = $(this).data('modal-id');
+
+                $.get(url, function (data) {
+                    $(modalId).find('.modal-content').html(data);
+                    $(modalId).modal('show');
+                });
+            });
+
+           
+            $(document).on('submit', '#crudModal form', function (e) {
+                e.preventDefault();
+                var form = $(this);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: form.attr('method'),
+                    data: form.serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                           
+                            alert(response.message);
+                            $('#crudModal').modal('hide');
+                            window.location.reload();
+                        } else {
+                          
+                            alert("Operation failed: " + response.message);
+                        }
+                    },
+                    error: function (xhr) {
+                       
+                        if (xhr.status === 400) {
+                           
+                            $('#crudModal .modal-content').html(xhr.responseText);
+                           
+                            $.validator.unobtrusive.parse('#crudModal .modal-content');
+                        } else {
+                            alert("An unexpected error occurred. Check server logs.");
+                            console.log(xhr.responseText);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
